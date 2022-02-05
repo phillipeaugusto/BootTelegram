@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "BootTelegram": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
