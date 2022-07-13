@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Intrinsics.X86;
+using System.Threading;
 using System.Threading.Tasks;
 using BootTelegram.Application.Services;
 using BootTelegram.Domain.Entities;
 using BootTelegram.Infrastructure.Services.Telegram;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TL;
 using WTelegram;
 using static System.String;
 
-namespace BootTelegram.Workers
+namespace BootTelegram.Worker.Workers
 {
-    public class WorkerTelegram
+    
+    public class WorkerTelegram: BackgroundService
     {
-        private ILogger _logger;
+        private ILogger<WorkerTelegram> _logger;
         private GroupService _groupService;
         private ReadingService _readingService;
         private MessageHandlingService _messageHandlingService;
@@ -25,7 +26,7 @@ namespace BootTelegram.Workers
         private Client _client;
         private User _myuser;
         
-        public WorkerTelegram(ILogger logger, GroupService groupService, ReadingService readingService, MessageHandlingService messageHandlingService, TelegramConfig telegramConfig)
+        public WorkerTelegram(ILogger<WorkerTelegram> logger, GroupService groupService, ReadingService readingService, MessageHandlingService messageHandlingService, TelegramConfig telegramConfig)
         {
             _logger = logger;
             _groupService = groupService;
@@ -93,14 +94,13 @@ namespace BootTelegram.Workers
             InputPeer peerUser;
             var group = _listGroup.FirstOrDefault(x => x.CodeIndentifierGroup == msg.Peer.ID);
 
-            if ((group is null) || (msg is not Message message)) return;
-            if (message.message == Empty) return;
-            
-            
+            if (group is null || msg is not Message message || message.message == Empty) 
+                return;
+
             if (group.FinalShippingType == 'G')
-                peerUser = new InputPeerChannel {access_hash = await ReturnAccessHashFromChat(group.CodeIndentifierGroupDestiny), channel_id = group.CodeIndentifierGroupDestiny};
+                peerUser = new InputPeerChannel(group.CodeIndentifierGroupDestiny, await ReturnAccessHashFromChat(group.CodeIndentifierGroupDestiny));
             else
-                peerUser = new InputPeerUser {user_id = group.CodeIndentifierGroupDestiny};
+                peerUser = new InputPeerUser(group.CodeIndentifierGroupDestiny, await ReturnAccessHashFromChat(group.CodeIndentifierGroupDestiny));
 
             _logger.LogInformation("Adjusting Message .... - {RequestTime} ", DateTime.Now);
             var msgAdjust = await _messageHandlingService.AdjustMessage(message.message);
@@ -116,6 +116,12 @@ namespace BootTelegram.Workers
             );
             
             _logger.LogInformation("Message Sent and Saved Successfully .... - {RequestTime} ", DateTime.Now);
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogInformation("Initializing Worker - {RequestTime} ", DateTime.Now);
+            await ExecuteAsync();
         }
     }
 }

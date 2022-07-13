@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BootTelegram.Extensions
+namespace BootTelegram.Worker.Extensions
 {
     [ExcludeFromCodeCoverage]
     public static class ServicesDataBaseExtension
