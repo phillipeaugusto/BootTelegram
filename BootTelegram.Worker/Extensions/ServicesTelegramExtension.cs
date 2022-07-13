@@ -3,7 +3,7 @@ using BootTelegram.Infrastructure.Services.Telegram;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BootTelegram.Extensions
+namespace BootTelegram.Worker.Extensions
 {
     [ExcludeFromCodeCoverage]
     public static class ServicesTelegramExtension
