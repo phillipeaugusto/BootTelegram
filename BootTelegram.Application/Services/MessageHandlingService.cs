@@ -3,25 +3,24 @@ using System.Globalization;
 using System.Threading.Tasks;
 using BootTelegram.Domain.Repositories;
 
-namespace BootTelegram.Application.Services
+namespace BootTelegram.Application.Services;
+
+public class MessageHandlingService
 {
-    public class MessageHandlingService
-    {
-        private readonly IDictionaryDataRepository _dictionaryDataRepository;
+    private readonly IDictionaryDataRepository _dictionaryDataRepository;
 
-        public MessageHandlingService(IDictionaryDataRepository dictionaryDataRepository)
-        { 
-            _dictionaryDataRepository = dictionaryDataRepository;
-        }
+    public MessageHandlingService(IDictionaryDataRepository dictionaryDataRepository)
+    { 
+        _dictionaryDataRepository = dictionaryDataRepository;
+    }
         
-        public async Task<string> AdjustMessage(string message)
-        {
-            var dataDictionary = await _dictionaryDataRepository.GetDictionary();
+    public async Task<string> AdjustMessage(string message)
+    {
+        var dataDictionary = await _dictionaryDataRepository.GetDictionary();
 
-            foreach (var (key, value) in dataDictionary) 
-                message = message.Replace(key, value, true, CultureInfo.InvariantCulture);
+        foreach (var (key, value) in dataDictionary) 
+            message = message.Replace(key, value, true, CultureInfo.InvariantCulture);
                 
-            return message;
-        }
+        return message;
     }
 }

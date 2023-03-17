@@ -1,16 +1,15 @@
-﻿namespace BootTelegram.Domain.Entities
+﻿namespace BootTelegram.Domain.Entities;
+
+public class DictionaryData: Entity
 {
-    public class DictionaryData: Entity
+    public DictionaryData() { }
+
+    public DictionaryData(string key, string value)
     {
-        public DictionaryData() { }
-
-        public DictionaryData(string key, string value)
-        {
-            Key = key;
-            Value = value;
-        }
-
-        public string Key { get; set; }
-        public string Value { get; set; }
+        Key = key;
+        Value = value;
     }
+
+    public string Key { get; set; }
+    public string Value { get; set; }
 }

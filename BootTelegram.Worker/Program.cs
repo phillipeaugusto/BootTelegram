@@ -1,5 +1,3 @@
-
-using BootTelegram.Extensions;
 using BootTelegram.Worker.Extensions;
 using BootTelegram.Worker.Workers;
 using Microsoft.Extensions.DependencyInjection;

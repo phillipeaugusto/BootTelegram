@@ -1,7 +1,6 @@
-﻿namespace BootTelegram.Domain.Entities
+﻿namespace BootTelegram.Domain.Entities;
+
+public abstract class EntityBase
 {
-    public abstract class EntityBase
-    {
         
-    }
 }

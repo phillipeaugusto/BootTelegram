@@ -1,10 +1,9 @@
 ﻿using BootTelegram.Domain.Entities;
 using BootTelegram.Domain.Repositories.Contracts;
 
-namespace BootTelegram.Domain.Repositories
+namespace BootTelegram.Domain.Repositories;
+
+public interface IReadingRepository: IRepository<Reading>
 {
-    public interface IReadingRepository: IRepository<Reading>
-    {
         
-    }
 }
